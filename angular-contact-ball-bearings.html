@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Angular Contact Ball Bearings | BW Product Guide</title>
+  <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <style>
+    :root{--bw-navy:#071b35;--bw-navy-2:#0b2748;--bw-card:#102f55;--bw-red:#e21b2d;--bw-white:#fff;--bw-soft:#c9d6e5;--bw-border:rgba(255,255,255,.14)}
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:radial-gradient(circle at top,var(--bw-navy-2),var(--bw-navy));color:var(--bw-white)}
+    .bw-header{padding:20px 22px 12px;border-bottom:1px solid var(--bw-border);background:rgba(7,27,53,.94);position:sticky;top:0;z-index:20;backdrop-filter:blur(8px)}.brand{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:14px}.logo{width:56px;height:56px;border-radius:50%;border:2px solid var(--bw-red);display:grid;place-items:center;font-weight:900;letter-spacing:-2px;box-shadow:0 0 22px rgba(226,27,45,.35)}h1{margin:0;font-size:clamp(24px,4vw,40px)}.sub{margin:3px 0 0;color:var(--bw-soft)}.topnav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.topnav a{color:#fff;text-decoration:none;border:1px solid var(--bw-red);border-radius:999px;padding:9px 18px;background:rgba(226,27,45,.12);font-weight:700}.topnav a:hover{background:var(--bw-red)}
+    .layout{max-width:1280px;margin:0 auto;padding:22px 16px 46px;display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px}.side{position:sticky;top:126px;align-self:start;background:rgba(255,255,255,.05);border:1px solid var(--bw-border);border-radius:22px;padding:12px}.tab{width:100%;display:block;text-align:left;border:1px solid transparent;background:transparent;color:#fff;padding:13px 14px;border-radius:14px;font-weight:800;cursor:pointer;margin:3px 0}.tab:hover,.tab.active{background:rgba(226,27,45,.18);border-color:rgba(226,27,45,.65)}
+    .content{background:rgba(255,255,255,.05);border:1px solid var(--bw-border);border-radius:24px;min-height:620px;box-shadow:0 16px 38px rgba(0,0,0,.22);overflow:hidden}.section{display:none;padding:24px}.section.active{display:block}.section h2{margin:0 0 14px;color:#fff;font-size:28px}.card{background:rgba(16,47,85,.8);border:1px solid var(--bw-border);border-radius:18px;padding:18px;margin:14px 0;line-height:1.55}.muted{color:var(--bw-soft)}
+    .gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}.photo{height:170px;border-radius:16px;border:1px solid var(--bw-border);background:#0d2545;display:grid;place-items:center;overflow:hidden}.photo img{width:100%;height:100%;object-fit:cover}.placeholder{color:var(--bw-soft);text-align:center;padding:18px}.doc-content,.sheet-content{background:#fff;color:#111;border-radius:16px;padding:18px;overflow:auto}.doc-content table,.sheet-content table{border-collapse:collapse;width:100%;margin:12px 0}.doc-content td,.doc-content th,.sheet-content td,.sheet-content th{border:1px solid #ccc;padding:8px;vertical-align:top}.doc-content h1,.doc-content h2,.doc-content h3{color:#111}.loader-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.btn{border:1px solid var(--bw-red);background:rgba(226,27,45,.12);color:#fff;border-radius:999px;padding:10px 16px;font-weight:800;cursor:pointer}.btn:hover{background:var(--bw-red)}code{background:rgba(255,255,255,.12);padding:2px 6px;border-radius:6px}
+    @media(max-width:820px){.layout{display:block}.side{position:sticky;top:106px;z-index:15;display:flex;overflow-x:auto;gap:8px;border-radius:0;margin:0 -16px 16px;padding:10px 16px}.tab{white-space:nowrap;width:auto;min-width:max-content}.section{padding:18px}.content{border-radius:20px}.brand{justify-content:flex-start}.topnav{justify-content:flex-start}}
+  </style>
+</head>
+<body>
+  <header class="bw-header">
+    <div class="brand"><div class="logo">BW</div><div><h1>Angular Contact Ball Bearings</h1><p class="sub">Product Guide / Bearings</p></div></div>
+    <nav class="topnav"><a href="product-guide.html">Back</a><a href="index.html">Dashboard</a></nav>
+  </header>
+  <main class="layout">
+    <aside class="side" aria-label="Product sections">
+      <button class="tab" data-target="images">Images</button>
+      <button class="tab active" data-target="identification">Identification</button>
+      <button class="tab" data-target="application">Application</button>
+      <button class="tab" data-target="brands">Brands</button>
+      <button class="tab" data-target="suppliers">Suppliers</button>
+      <button class="tab" data-target="brief">Brief Rundown</button>
+      <button class="tab" data-target="detailed">Detailed Rundown</button>
+    </aside>
+    <section class="content">
+      <div id="images" class="section"><h2>Images</h2><p class="muted">Store photos in <code>images/angular-contact-ball-bearings/</code>. Suggested names: cover.jpg, image-1.jpg, image-2.jpg, image-3.jpg.</p><div class="gallery" id="gallery"></div></div>
+      <div id="identification" class="section active"><h2>Identification</h2><div class="card"><p>Content coming soon.</p></div></div>
+      <div id="application" class="section"><h2>Application</h2><div class="card"><p>Content coming soon.</p></div></div>
+      <div id="brands" class="section"><h2>Brands</h2><div class="card"><p>Content coming soon.</p></div></div>
+      <div id="suppliers" class="section"><h2>Suppliers</h2><div class="card"><p>Content coming soon.</p></div></div>
+      <div id="brief" class="section"><h2>Brief Rundown</h2><div class="loader-row"><button class="btn" onclick="loadDocx()">Load DOCX</button><span class="muted">Expected file: <code>data/angular-contact-ball-bearings-brief.docx</code></span></div><div id="docxOut" class="doc-content">Content coming soon.</div></div>
+      <div id="detailed" class="section"><h2>Detailed Rundown</h2><div class="loader-row"><button class="btn" onclick="loadXlsx()">Load Excel</button><span class="muted">Expected file: <code>data/angular-contact-ball-bearings-detailed.xlsx</code></span></div><div id="xlsxOut" class="sheet-content">Content coming soon.</div></div>
+    </section>
+  </main>
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const sections = document.querySelectorAll('.section');
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    sections.forEach(s => s.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.add('active');
+    if(tab.dataset.target === 'images') buildGallery();
+  }));
+
+  function buildGallery(){
+    const gallery = document.getElementById('gallery');
+    if(gallery.dataset.done) return;
+    const files = ['cover.jpg','image-1.jpg','image-2.jpg','image-3.jpg','image-4.jpg','image-5.jpg'];
+    files.forEach(name => {
+      const wrap = document.createElement('div'); wrap.className='photo';
+      const img = document.createElement('img'); img.src = 'images/angular-contact-ball-bearings/' + name; img.alt = name;
+      img.onerror = () => { wrap.innerHTML = '<div class="placeholder">Content coming soon<br><small>'+name+'</small></div>'; };
+      wrap.appendChild(img); gallery.appendChild(wrap);
+    });
+    gallery.dataset.done = '1';
+  }
+
+  async function loadDocx(){
+    const out = document.getElementById('docxOut');
+    try{
+      out.innerHTML = 'Loading DOCX...';
+      const res = await fetch('data/angular-contact-ball-bearings-brief.docx');
+      if(!res.ok) throw new Error('DOCX not found');
+      const arrayBuffer = await res.arrayBuffer();
+      const result = await mammoth.convertToHtml({arrayBuffer});
+      out.innerHTML = result.value || 'Content coming soon.';
+    }catch(err){ out.innerHTML = 'Content coming soon.'; }
+  }
+
+  async function loadXlsx(){
+    const out = document.getElementById('xlsxOut');
+    try{
+      out.innerHTML = 'Loading Excel...';
+      const res = await fetch('data/angular-contact-ball-bearings-detailed.xlsx');
+      if(!res.ok) throw new Error('XLSX not found');
+      const arrayBuffer = await res.arrayBuffer();
+      const wb = XLSX.read(arrayBuffer, {type:'array'});
+      let html = '';
+      wb.SheetNames.forEach(name => {
+        html += '<h3>'+escapeHtml(name)+'</h3>';
+        html += XLSX.utils.sheet_to_html(wb.Sheets[name]);
+      });
+      out.innerHTML = html || 'Content coming soon.';
+    }catch(err){ out.innerHTML = 'Content coming soon.'; }
+  }
+  function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
+</script>
+</body>
+</html>
