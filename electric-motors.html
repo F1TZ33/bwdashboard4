@@ -36,7 +36,26 @@
     </aside>
     <section class="product-content">
       <div id="images" class="product-section"><h2>Images</h2><p class="subtitle">Place images in <code>assets/img/galleries/electric-motors/</code> using names <code>01.jpg</code>, <code>02.jpg</code>, etc. Select an image from the left menu to display it in the main image tile.</p><div class="product-image-viewer" id="imageViewer"><div class="product-placeholder">Select an image from the Images menu.</div></div></div>
-      <div id="identification" class="product-section active"><h2>Identification</h2><div class="product-info-grid"><div class="product-info-card"><h3>Visual checks</h3><p class="subtitle">Content coming soon.</p></div><div class="product-info-card"><h3>Measurements</h3><p class="subtitle">Content coming soon.</p></div></div></div>
+      <div id="identification" class="product-section active"><h2>Identification</h2>
+        <div class="section-reference-image" data-image-slot="identification">
+          <div class="section-reference-image-inner">
+            <img src="assets/img/identification/electric-motors.jpg" alt="Electric Motors labelled identification reference" onerror="this.parentElement.classList.add('missing'); this.remove();">
+            <div class="section-reference-placeholder">
+              Identification image placeholder<br>
+              <small>Add labelled catalogue image at <code>assets/img/identification/electric-motors.jpg</code></small>
+            </div>
+          </div>
+        </div>
+        <div class="product-info-card identification-card">
+          <ul class="identifyList">
+            <li><strong>Visual Shape:</strong> Drive unit with frame, shaft, terminal box and foot/flange mount.</li>
+            <li><strong>Key Checks:</strong> Confirm kW/HP, voltage, phase, RPM/poles, frame, mount and shaft.</li>
+            <li><strong>Nameplate Data:</strong> Use nameplate for voltage, current, speed, insulation and IP rating.</li>
+            <li><strong>Mounting Types:</strong> Foot, flange, face or combination mounting.</li>
+            <li><strong>Do Not Confuse With:</strong> Gearmotors; gearbox may need separate identification.</li>
+          </ul>
+        </div>
+      </div>
       <div id="application" class="product-section"><h2>Application</h2>
         <div class="product-info-card application-card">
           <ul class="appList">
@@ -48,7 +67,31 @@
           </ul>
         </div>
       </div>
-      <div id="brands" class="product-section"><h2>Brands</h2><div class="product-info-card"><p class="subtitle">Content coming soon.</p></div></div>
+      <div id="brands" class="product-section"><h2>Brands</h2>
+        <div class="section-reference-image" data-image-slot="identification">
+          <div class="section-reference-image-inner">
+            <img src="assets/img/identification/electric-motors.jpg" alt="Electric Motors labelled identification reference" onerror="this.parentElement.classList.add('missing'); this.remove();">
+            <div class="section-reference-placeholder">
+              Identification image placeholder<br>
+              <small>Add labelled catalogue image at <code>assets/img/identification/electric-motors.jpg</code></small>
+            </div>
+          </div>
+        </div>
+        <div class="product-info-card brands-card">
+          <p class="subtitle">Common brands and references to check for this product type.</p>
+          <div class="brandGrid">
+            <span class="brandPill">WEG</span>
+            <span class="brandPill">TECO</span>
+            <span class="brandPill">ABB</span>
+            <span class="brandPill">CMG</span>
+            <span class="brandPill">Brook Crompton</span>
+            <span class="brandPill">Bonfiglioli</span>
+            <span class="brandPill">SEW Eurodrive</span>
+            <span class="brandPill">NORD</span>
+          </div>
+          <p class="source-note">Brand availability varies by branch, supplier and application. Always confirm exact series, suffixes and dimensions before quoting.</p>
+        </div>
+      </div>
       <div id="suppliers" class="product-section"><h2>Suppliers</h2><div class="product-info-card"><p class="subtitle">Content coming soon.</p></div></div>
       <div id="brief" class="product-section"><h2>Brief Rundown</h2><p class="source-note">Loads from the stored DOCX source when available. Existing source loading has been preserved.</p><div id="briefOut" class="source-content">Loading brief rundown…</div></div>
       <div id="detailed" class="product-section"><h2>Detailed Rundown</h2><p class="source-note">Loads from the stored XLSX source when available. Existing source loading has been preserved.</p><div id="detailedOut" class="source-content">Loading detailed rundown…</div></div>

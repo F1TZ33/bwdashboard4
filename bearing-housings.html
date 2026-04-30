@@ -36,7 +36,26 @@
     </aside>
     <section class="product-content">
       <div id="images" class="product-section"><h2>Images</h2><p class="subtitle">Place images in <code>assets/img/galleries/bearing-housings/</code> using names <code>01.jpg</code>, <code>02.jpg</code>, etc. Select an image from the left menu to display it in the main image tile.</p><div class="product-image-viewer" id="imageViewer"><div class="product-placeholder">Select an image from the Images menu.</div></div></div>
-      <div id="identification" class="product-section active"><h2>Identification</h2><div class="product-info-grid"><div class="product-info-card"><h3>Visual checks</h3><p class="subtitle">Content coming soon.</p></div><div class="product-info-card"><h3>Measurements</h3><p class="subtitle">Content coming soon.</p></div></div></div>
+      <div id="identification" class="product-section active"><h2>Identification</h2>
+        <div class="section-reference-image" data-image-slot="identification">
+          <div class="section-reference-image-inner">
+            <img src="assets/img/identification/bearing-housings.jpg" alt="Bearing Housings labelled identification reference" onerror="this.parentElement.classList.add('missing'); this.remove();">
+            <div class="section-reference-placeholder">
+              Identification image placeholder<br>
+              <small>Add labelled catalogue image at <code>assets/img/identification/bearing-housings.jpg</code></small>
+            </div>
+          </div>
+        </div>
+        <div class="product-info-card identification-card">
+          <ul class="identifyList">
+            <li><strong>Visual Shape:</strong> Cast or pressed housing that supports an insert bearing or bearing unit.</li>
+            <li><strong>Common Types:</strong> Pillow block, flange, take-up, plummer block, hanger and pressed steel units.</li>
+            <li><strong>Key Checks:</strong> Confirm shaft size, bolt centres, housing style, seal arrangement and whether insert is included.</li>
+            <li><strong>Common Markings:</strong> P, F, FL, T, PA, UCP, UCF, UCFL, SNL or SN style references.</li>
+            <li><strong>Do Not Confuse With:</strong> Bare insert bearings; housing and insert may be separate or assembled.</li>
+          </ul>
+        </div>
+      </div>
       <div id="application" class="product-section"><h2>Application</h2>
         <div class="product-info-card application-card">
           <ul class="appList">
@@ -48,7 +67,32 @@
           </ul>
         </div>
       </div>
-      <div id="brands" class="product-section"><h2>Brands</h2><div class="product-info-card"><p class="subtitle">Content coming soon.</p></div></div>
+      <div id="brands" class="product-section"><h2>Brands</h2>
+        <div class="section-reference-image" data-image-slot="identification">
+          <div class="section-reference-image-inner">
+            <img src="assets/img/identification/bearing-housings.jpg" alt="Bearing Housings labelled identification reference" onerror="this.parentElement.classList.add('missing'); this.remove();">
+            <div class="section-reference-placeholder">
+              Identification image placeholder<br>
+              <small>Add labelled catalogue image at <code>assets/img/identification/bearing-housings.jpg</code></small>
+            </div>
+          </div>
+        </div>
+        <div class="product-info-card brands-card">
+          <p class="subtitle">Common brands and references to check for this product type.</p>
+          <div class="brandGrid">
+            <span class="brandPill">SKF</span>
+            <span class="brandPill">NSK</span>
+            <span class="brandPill">NTN</span>
+            <span class="brandPill">FAG / INA</span>
+            <span class="brandPill">FYH</span>
+            <span class="brandPill">ASAHI</span>
+            <span class="brandPill">Peer</span>
+            <span class="brandPill">RHP</span>
+            <span class="brandPill">Timken</span>
+          </div>
+          <p class="source-note">Brand availability varies by branch, supplier and application. Always confirm exact series, suffixes and dimensions before quoting.</p>
+        </div>
+      </div>
       <div id="suppliers" class="product-section"><h2>Suppliers</h2><div class="product-info-card"><p class="subtitle">Content coming soon.</p></div></div>
       <div id="brief" class="product-section"><h2>Brief Rundown</h2><p class="source-note">Loads from the stored DOCX source when available. Existing source loading has been preserved.</p><div id="briefOut" class="source-content">Loading brief rundown…</div></div>
       <div id="detailed" class="product-section"><h2>Detailed Rundown</h2><p class="source-note">Loads from the stored XLSX source when available. Existing source loading has been preserved.</p><div id="detailedOut" class="source-content">Loading detailed rundown…</div></div>
