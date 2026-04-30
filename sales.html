@@ -155,16 +155,17 @@
     <aside class="salesNav">
       <div class="navTitle">Types</div>
       <div id="navRoot"></div>
+
+      <div class="navTitle scriptNavTitle">Scripts / Prompts</div>
+      <div class="scriptActions show" id="scriptActions">
+        <button class="scriptBtn" type="button" onclick="openScriptOverlay()">💬 Re-Engagement scripts / prompts</button>
+      </div>
     </aside>
 
     <main class="salesContent">
       <div class="contentBadge" id="contentType">⚡ Basics</div>
       <h2 class="contentTitle" id="contentTitle">Silent Internal Triggers (No Customer Involvement)</h2>
       <p class="contentLead" id="contentLead">Core principle</p>
-
-      <div class="scriptActions" id="scriptActions">
-        <button class="scriptBtn" type="button" onclick="openScriptOverlay()">💬 View scripts / prompts</button>
-      </div>
 
       <ul class="contentList" id="contentList"></ul>
       <div class="contentHint">The active section stays expanded until a different heading is opened.</div>
@@ -357,11 +358,7 @@ function renderContent(type, item){
     contentList.appendChild(li);
   });
 
-  if(type.key === 'reengagement'){
-    scriptActions.classList.add('show');
-  } else {
-    scriptActions.classList.remove('show');
-  }
+  // Scripts / prompts now live permanently in the left menu.
 }
 
 function openScriptOverlay(){

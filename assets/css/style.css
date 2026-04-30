@@ -51,7 +51,7 @@ li{margin:6px 0}
 /* Product card format */
 .productCard{min-height:290px;display:flex;flex-direction:column;justify-content:space-between;padding:18px}
 .productTitle{text-align:center;font-weight:950;font-size:18px;margin-top:2px}
-.thumbSpace{flex:1;margin:14px 8px 12px;border:1px dashed rgba(255,255,255,.16);border-radius:14px;background:rgba(255,255,255,.02)}
+.thumbSpace{flex:1;margin:14px 8px 12px;border:0;border-radius:14px;background:transparent}
 .productActions{display:flex;gap:12px;justify-content:center;align-items:center;margin-top:8px;flex-wrap:wrap}
 
 /* modal */
@@ -812,4 +812,20 @@ a.productCard,
 }
 .application-card{
   max-width:980px;
+}
+
+/* === Final product guide tile polish === */
+.cards.products .thumbSpace{
+  border:0 !important;
+  outline:0 !important;
+  background:transparent !important;
+  min-height:165px;
+  height:165px;
+  margin:4px 0 8px;
+}
+.cards.products .productThumb{
+  width:160px;
+  height:160px;
+  max-width:92%;
+  object-fit:contain;
 }
