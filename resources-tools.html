@@ -3,82 +3,169 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Resources — Tools / How To</title>
+<title>How to Read a Metric Vernier Calliper</title>
+
 <link href="assets/css/style.css" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+
 <style>
-.toolLibrary{margin-top:18px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch;}
-@media(max-width:1000px){.toolLibrary{grid-template-columns:repeat(2,minmax(0,1fr));}}
-@media(max-width:640px){.toolLibrary{grid-template-columns:1fr;}}
-.toolCard{cursor:pointer;min-height:210px;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:flex-start;gap:10px;}
-.toolCardIcon{width:118px;height:118px;object-fit:contain;border-radius:16px;filter:drop-shadow(0 14px 24px rgba(0,0,0,.38));transition:transform .22s ease, filter .22s ease;}
-.toolCard:hover .toolCardIcon{transform:translateY(-4px) scale(1.08);filter:drop-shadow(0 20px 34px rgba(0,0,0,.52));}
-.toolViewer{margin-top:20px;}
-.toolActions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0 0;}
-.toolDoc{background:#fff;color:#111;border-radius:18px;padding:22px;overflow:auto;box-shadow:0 16px 38px rgba(0,0,0,.22);}
-.toolDoc h1,.toolDoc h2,.toolDoc h3{color:#111;}
-.toolDoc img{max-width:100%;height:auto;}
-.toolDoc table{border-collapse:collapse;width:100%;margin:12px 0;}
-.toolDoc td,.toolDoc th{border:1px solid #ccc;padding:8px;vertical-align:top;}
-</style>
-</head>
-<body data-page="page" data-back="resources.html">
-<div class="container"><div id="bw-global-header"></div>
-<section class="heroPanel">
-<div class="heroIcon">🛠️</div>
-<h1>Tools / How To</h1>
-<p class="subtitle" style="text-align:center;max-width:820px;margin:10px auto 0">Practical reference guides for tools, measuring, and counter support.</p>
-</section>
+.toolLayout{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
 
-<section class="toolLibrary">
-  <button class="card toolCard" type="button" data-doc="downloads/resources/tools/How to read a metric vernier calliper.docx" data-title="How to read a metric vernier calliper">
-    <img class="toolCardIcon" src="assets/icons/verniercalliper.png" alt="Tools">
-    <div class="productTitle">Metric Vernier Calliper</div>
-    <div class="subtitle">How to read and check a metric vernier calliper.</div>
-  </button>
-</section>
+.toolSection{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:20px;
+}
 
-<section class="toolViewer card" id="toolViewer">
-  <h2 id="toolTitle">Metric Vernier Calliper</h2>
-  <p class="subtitle" id="toolStatus">Loading guide…</p>
-  <div class="toolActions">
-    <a class="btn" href="downloads/resources/tools/How to read a metric vernier calliper.docx" download>Download DOCX</a>
-  </div>
-  <div id="toolDoc" class="toolDoc" style="margin-top:16px;">Loading guide…</div>
-</section>
-</div>
+.toolSection h2{
+  margin-bottom:10px;
+}
 
-<script src="assets/js/app.js"></script>
-<script src="assets/js/bw-header.js"></script>
-<script>
-async function loadToolDoc(path, title){
-  const out = document.getElementById('toolDoc');
-  const status = document.getElementById('toolStatus');
-  const heading = document.getElementById('toolTitle');
-  heading.textContent = title || 'Tool Guide';
-  status.textContent = 'Loading guide…';
-  out.innerHTML = 'Loading guide…';
-  try{
-    const res = await fetch(path, {cache:'no-store'});
-    if(!res.ok) throw new Error('DOCX not found');
-    const arrayBuffer = await res.arrayBuffer();
-    const result = await mammoth.convertToHtml({arrayBuffer});
-    out.innerHTML = result.value || '<p>No content found.</p>';
-    status.textContent = 'Loaded from source DOCX.';
-  }catch(err){
-    out.innerHTML = '<p><strong>Unable to load guide.</strong></p><p>Please check the source file exists at <code>'+escapeHtml(path)+'</code>.</p>';
-    status.textContent = 'Unable to load guide.';
-    console.error(err);
+.toolImage{
+  width:100%;
+  border-radius:12px;
+  margin:10px 0 20px;
+}
+
+.toolGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
+
+@media (max-width:700px){
+  .toolGrid{
+    grid-template-columns:1fr;
   }
 }
-function escapeHtml(s){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-document.querySelectorAll('[data-doc]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    loadToolDoc(btn.dataset.doc, btn.dataset.title);
-    document.getElementById('toolViewer').scrollIntoView({behavior:'smooth',block:'start'});
-  });
-});
-loadToolDoc('downloads/resources/tools/How to read a metric vernier calliper.docx','How to read a metric vernier calliper');
-</script>
+
+.toolStep{
+  margin-bottom:12px;
+}
+
+.toolStep strong{
+  display:block;
+  margin-bottom:6px;
+}
+
+</style>
+</head>
+
+<body data-back="resources.html">
+
+<div class="container">
+<div id="bw-global-header"></div>
+
+<section class="heroPanel">
+  <div class="heroIcon">📏</div>
+  <h1>How to Read a Metric Vernier Calliper</h1>
+  <p class="subtitle">Tools / How To</p>
+</section>
+
+<div class="toolLayout">
+
+  <!-- INTRO -->
+  <div class="toolSection">
+    <p>
+      A Vernier Calliper is a precision instrument can be used to accurately measure internal and external distances, and depths.
+      The example shown below is an analogue vernier where measurements need to be interpreted from a scale.
+      This type of vernier is more difficult than a digital vernier calliper with a readable digital display but once mastered gives far more reliable and actionable readings.
+      Models used should read both imperial (inches), metric (mm) sizes.
+    </p>
+  </div>
+
+  <!-- MAIN IMAGE -->
+  <div class="toolSection">
+    <img src="assets/images/vernier-calliper.png" class="toolImage">
+  </div>
+
+  <!-- USE TYPES -->
+  <div class="toolSection">
+    <h2>Measurement Types</h2>
+
+    <div class="toolGrid">
+      <div>
+        <img src="assets/images/vernier-od.png" class="toolImage">
+        <p>Measure the outside dimensions</p>
+      </div>
+
+      <div>
+        <img src="assets/images/vernier-id.png" class="toolImage">
+        <p>Measure the inner size</p>
+      </div>
+
+      <div>
+        <img src="assets/images/vernier-portion.png" class="toolImage">
+        <p>Measure different portion sizes</p>
+      </div>
+
+      <div>
+        <img src="assets/images/vernier-depth.png" class="toolImage">
+        <p>Measure the depth</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="toolSection">
+    <h2>STEP 1 – Check Vernier before use</h2>
+    <p>
+      Check the vernier calliper is working by closing the Vernier Calliper jaws.
+      Check for damage of temple mouth of the Vernier by holding it up to a light.
+      If the light emanates the Vernier’s mouth, the jaws are damaged and an accurate reading cannot be obtained.
+    </p>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="toolSection">
+    <h2>STEP 2 – Look at the main scale</h2>
+    <p>
+      The vernier has twenty spaces between 0-20 on the Vernier scale.
+      These small divisions of main scale, mark increments of five hundredths of millimeter (0.05 mm).
+      The main scale reads in millimetre increments.
+    </p>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="toolSection">
+    <h2>STEP 3 – Reading the Vernier</h2>
+
+    <img src="assets/images/vernier-scale.png" class="toolImage">
+
+    <div class="toolStep">
+      <strong>Main Scale</strong>
+      <p>Read the measurement result at the Main scale.</p>
+      <p>
+        Note the bottom center “0” of the Vernier scale corresponds to the range of the main scale above it.
+        In the figure, it can be read at 13.00 mm.
+      </p>
+    </div>
+
+    <div class="toolStep">
+      <strong>Vernier Scale</strong>
+      <p>
+        Assess which graduation aligns with any main scale graduation.
+        In this example, the 10th scale aligns.
+      </p>
+      <p>10 × 0.05 mm = 0.50 mm</p>
+    </div>
+
+    <div class="toolStep">
+      <strong>Final Reading</strong>
+      <p>13.00 mm + 0.50 mm = <strong>13.50 mm</strong></p>
+    </div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script src="assets/js/bw-header.js"></script>
+
 </body>
 </html>
