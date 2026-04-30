@@ -821,13 +821,13 @@ html{
   border:0 !important;
   outline:0 !important;
   background:transparent !important;
-  min-height:165px;
-  height:165px;
+  min-height:220px;
+  height:220px;
   margin:4px 0 8px;
 }
 .cards.products .productThumb{
-  width:160px;
-  height:160px;
+  width:220px;
+  height:220px;
   max-width:92%;
   object-fit:contain;
 }
