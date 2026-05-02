@@ -33,10 +33,10 @@ body{
 .orderRow{
   position:relative;
   display:grid;
-  grid-template-columns:minmax(0,1fr) 110px;
+  grid-template-columns:minmax(0,1fr) 110px 132px;
   grid-template-areas:
-    "part qty"
-    "scan scan";
+    "part qty confirm"
+    "scan scan scan";
   gap:10px;
   padding:18px 14px 14px;
   border:1px solid rgba(255,255,255,.08);
@@ -47,10 +47,12 @@ body{
 .orderPartBlock{grid-area:part;}
 .orderQtyBlock{grid-area:qty;}
 .orderScanWrap{grid-area:scan;}
+.orderConfirmBlock{grid-area:confirm;display:flex;align-items:end;}
 
 .field input,
 .orderScanBtn,
-.orderMiniBtn{
+.orderMiniBtn,
+.orderConfirmBtn{
   height:48px;
   min-height:48px;
   box-sizing:border-box;
@@ -64,7 +66,8 @@ body{
 }
 
 .orderScanBtn,
-.orderMiniBtn{
+.orderMiniBtn,
+.orderConfirmBtn{
   border-radius:12px;
   border:1px solid rgba(198,40,40,.28);
   background:linear-gradient(180deg, rgba(198,40,40,.12), rgba(198,40,40,.06));
@@ -218,6 +221,7 @@ body{
     grid-template-areas:
       "part"
       "qty"
+      "confirm"
       "scan";
   }
 
@@ -270,7 +274,7 @@ body{
       <video id="qrVideo" muted playsinline></video>
       <canvas id="qrCanvas"></canvas>
     </div>
-    <p class="scanHint">Mobile camera only. QR should contain part number, full bin location, and max quantity.</p>
+    <p class="scanHint">Mobile camera only. QR should contain the part number. Quantity defaults to 1 and can be changed before confirming.</p>
   </div>
 </div>
 
@@ -340,7 +344,7 @@ body{
       return {part:csv[0], bin:csv[1], max:csv[2]};
     }
 
-    return {part:'', bin:text, max:''};
+    return {part:text, bin:'', max:''};
   }
 
   function applyScanToRow(payload){
@@ -350,20 +354,15 @@ body{
     const partInput = scannedRow.querySelector('.partInput');
     const qtyInput = scannedRow.querySelector('.qtyInput');
 
-    const partText = [payload.part, payload.bin].filter(Boolean).join(' — ');
-
-    partInput.value = partText || payload.bin || payload.part || '';
-    qtyInput.value = payload.max || '';
+    partInput.value = payload.part || payload.bin || '';
+    qtyInput.value = '1';
 
     lastEntryWasScan = true;
 
-    if(partInput.value && qtyInput.value && scannedRow === root.lastElementChild){
-      const nextRow = row();
-
-      setTimeout(() => {
-        startScanner(nextRow);
-      }, 300);
-    }
+    setTimeout(() => {
+      qtyInput.focus();
+      qtyInput.select();
+    }, 80);
 
     activeRow = null;
   }
@@ -460,6 +459,10 @@ body{
         <input class="qtyInput" type="number">
       </div>
 
+      <div class="orderConfirmBlock">
+        <button class="orderConfirmBtn" type="button">Confirm</button>
+      </div>
+
       <button class="orderMiniBtn orderRemoveBtn" type="button">×</button>
 
       <div class="orderScanWrap">
@@ -472,20 +475,51 @@ body{
     const part = el.querySelector('.partInput');
     const qty = el.querySelector('.qtyInput');
 
-    qty.addEventListener('blur', () => {
-      if(part.value && qty.value && el === root.lastElementChild){
+    function confirmLine(){
+      if(!part.value.trim()){
+        part.focus();
+        return;
+      }
+      if(!qty.value.trim()){
+        qty.value = '1';
+      }
+      if(el === root.lastElementChild){
         lastEntryWasScan = false;
-        row();
+        const next = row();
+        const nextPart = next.querySelector('.partInput');
+        setTimeout(() => {
+          nextPart.focus();
+          next.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 40);
+      }
+    }
+
+    part.addEventListener('change', () => {
+      if(part.value.trim() && !qty.value.trim()){
+        qty.value = '1';
+      }
+    });
+
+    part.addEventListener('keydown', event => {
+      if(event.key === 'Enter'){
+        event.preventDefault();
+        if(part.value.trim() && !qty.value.trim()) qty.value = '1';
+        qty.focus();
+        qty.select();
+      }
+    });
+
+    qty.addEventListener('focus', () => {
+      if(part.value.trim() && !qty.value.trim()){
+        qty.value = '1';
+        qty.select();
       }
     });
 
     qty.addEventListener('keydown', event => {
       if(event.key === 'Enter'){
         event.preventDefault();
-        if(part.value && qty.value && el === root.lastElementChild){
-          lastEntryWasScan = false;
-          row();
-        }
+        confirmLine();
       }
     });
 
@@ -497,6 +531,8 @@ body{
         el.remove();
       }
     };
+
+    el.querySelector('.orderConfirmBtn').onclick = confirmLine;
 
     el.querySelector('.orderScanBtn').onclick = () => startScanner(el);
 
