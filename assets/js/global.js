@@ -1,6 +1,6 @@
 (function(){
   const EDIT_ROLES = ['admin','editor'];
-  const VIEW_ROLES = ['viewer','editor','admin','authenticated'];
+  const VIEW_ROLES = ['editor','admin'];
   const AUTH_CACHE_KEY = 'bwAuthPrincipalCache';
 
   function injectGlobalStyles(){
@@ -19,6 +19,8 @@
       .bw-edit-field{ width:100%; box-sizing:border-box; margin:6px 0 10px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.15); background:rgba(0,0,0,.25); color:#fff; font:inherit; }
       textarea.bw-edit-field{ min-height:130px; resize:vertical; }
       .bw-edit-note{ color:rgba(255,255,255,.65); font-size:12px; margin:8px 0 0; line-height:1.45; }
+      body.bw-can-edit .bw-live-edit-hint{display:block;}
+      .bw-live-edit-hint{display:none;color:rgba(255,255,255,.62);font-size:12px;margin:8px 0;}
     `;
     document.head.appendChild(style);
   }

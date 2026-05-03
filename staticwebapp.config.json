@@ -1,18 +1,8 @@
 {
   "routes": [
     {
-      "route": "/api/*",
-      "allowedRoles": [
-        "editor",
-        "admin"
-      ]
-    },
-    {
       "route": "/*",
-      "allowedRoles": [
-        "editor",
-        "admin"
-      ]
+      "allowedRoles": ["editor", "admin"]
     }
   ],
   "responseOverrides": {
