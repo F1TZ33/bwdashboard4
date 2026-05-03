@@ -86,3 +86,77 @@
   document.addEventListener('bw:user-ready', cleanupLegacyEditorPanels);
   setTimeout(cleanupLegacyEditorPanels, 500);
 })();
+
+
+// BW Azure editor: download stored changes as JSON.
+(function(){
+  const BW_EXPORT_KEYS = [
+    'checklists-access-content-v2',
+    'checklists-access-content',
+    'sops-content',
+    'faqs-content',
+    'sales-tips'
+  ];
+
+  const PRODUCT_SLUGS = [
+    'angular-contact-ball-bearings','ball-bearings','bearing-housings','bronze-bushings','bushings-hubs',
+    'cylindrical-roller-bearings','electric-motors','gearboxes-gear-reducers','insert-bearings',
+    'needle-roller-bearings','o-rings','pulleys','rotary-seals','shaft-collars-shrink-rings',
+    'spherical-plain-bearings','spherical-roller-bearings','sprockets','tapered-roller-bearings',
+    'thrust-bearings','timing-belts','timing-pulleys','transmission-chain-conveyor-chain','v-belts'
+  ];
+  const PRODUCT_SECTIONS = ['identification','application','brands','suppliers'];
+
+  function buildKeys(){
+    const keys = BW_EXPORT_KEYS.slice();
+    PRODUCT_SLUGS.forEach(slug => PRODUCT_SECTIONS.forEach(section => keys.push(`product-page-v3::${slug}::${section}`)));
+    return keys;
+  }
+
+  async function downloadChanges(){
+    if(!window.BWContentStore){
+      alert('Content store is not ready yet.');
+      return;
+    }
+    const out = {
+      exportedAt: new Date().toISOString(),
+      exportedBy: window.BWUser ? (window.BWUser.userDetails || window.BWUser.userId || null) : null,
+      source: location.origin,
+      content: {}
+    };
+
+    for(const key of buildKeys()){
+      try{
+        const value = await BWContentStore.get(key, null);
+        if(value !== null && value !== undefined) out.content[key] = value;
+      }catch(e){
+        out.content[key] = { exportError: e.message || String(e) };
+      }
+    }
+
+    const blob = new Blob([JSON.stringify(out, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,'-');
+    a.href = URL.createObjectURL(blob);
+    a.download = `bw-dashboard-changes-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{URL.revokeObjectURL(a.href); a.remove();}, 500);
+  }
+
+  function injectDownloadButton(){
+    if(document.getElementById('bwDownloadChangesWrap')) return;
+    const indicator = document.getElementById('userIndicator');
+    if(!indicator) return;
+    const wrap = document.createElement('div');
+    wrap.id = 'bwDownloadChangesWrap';
+    wrap.className = 'bw-download-changes-wrap';
+    wrap.innerHTML = '<button class="bw-download-changes-btn" type="button">Download changes JSON</button>';
+    indicator.insertAdjacentElement('afterend', wrap);
+    wrap.querySelector('button').addEventListener('click', downloadChanges);
+  }
+
+  window.BWDownloadChanges = downloadChanges;
+  document.addEventListener('DOMContentLoaded', injectDownloadButton);
+  document.addEventListener('bw:user-ready', injectDownloadButton);
+})();
