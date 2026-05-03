@@ -222,51 +222,205 @@
 })();
 </script>
 
+
 <script id="bw-product-inline-all-lines">
 (function(){
   const EDITABLE_SECTIONS = ['identification','application','brands','suppliers'];
+  const SAVE_DELAY = 450;
+  let saveTimer = null;
+  const loadedSections = new Set();
+
   function canEdit(){
     return !!(window.BWCanEdit || (window.BWContentStore && BWContentStore.canWrite && BWContentStore.canWrite()));
   }
-  function normalise(s){return String(s||'').toLowerCase().replace(/[^a-z]/g,'');}
-  function activeSectionName(){
-    const active = document.querySelector('.subButton.active,.sideNav button.active,.leftMenu button.active,.productMenu .active,[data-section].active,.tab.active,.menu button.active');
-    const h = document.querySelector('.contentTitle,h2,h1');
-    return normalise(active ? active.textContent : (h ? h.textContent : ''));
+
+  function slug(){
+    const layout = document.querySelector('[data-product-slug]');
+    return (layout && layout.dataset.productSlug) || location.pathname.split('/').pop().replace(/\.html$/,'') || 'product';
   }
-  function makeEditableLine(el){
-    if(el.dataset.bwLineEditable==='1') return;
-    el.dataset.bwLineEditable='1';
-    el.contentEditable='true';
+
+  function storageKey(sectionId){
+    return 'product-page::' + slug() + '::' + sectionId;
+  }
+
+  function activeSection(){
+    return document.querySelector('.product-section.active');
+  }
+
+  function isEditableSection(section){
+    return section && EDITABLE_SECTIONS.includes(section.id);
+  }
+
+  async function saveSection(section){
+    if(!section || !isEditableSection(section)) return;
+    const key = storageKey(section.id);
+    const value = {
+      html: section.innerHTML,
+      updatedAt: new Date().toISOString()
+    };
+    try{
+      localStorage.setItem('bwRemoteCache::' + key, JSON.stringify(value));
+      if(window.BWContentStore) await BWContentStore.save(key, value);
+    }catch(e){
+      console.warn('Product section save failed:', e);
+    }
+  }
+
+  function scheduleSave(section){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => saveSection(section), SAVE_DELAY);
+  }
+
+  function cleanEditable(el){
+    el.removeAttribute('contenteditable');
+    el.classList.remove('bw-inline-product-line');
+  }
+
+  function addDeleteButton(target, section){
+    if(!canEdit()) return;
+    const parent = target.closest('li,.brandPill,p') || target;
+    if(parent.dataset.bwHasDelete === '1') return;
+    parent.dataset.bwHasDelete = '1';
+    if(getComputedStyle(parent).position === 'static') parent.style.position = 'relative';
+    const btn = document.createElement('button');
+    btn.className = 'bw-inline-delete';
+    btn.type = 'button';
+    btn.textContent = '×';
+    btn.title = 'Delete line';
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      parent.remove();
+      await saveSection(section);
+    });
+    parent.appendChild(btn);
+  }
+
+  function makeEditable(el, section){
+    if(el.dataset.bwLineEditable === '1') return;
+    el.dataset.bwLineEditable = '1';
+    el.contentEditable = 'true';
     el.classList.add('bw-inline-product-line');
+
+    el.addEventListener('blur', () => scheduleSave(section));
+    el.addEventListener('input', () => scheduleSave(section));
     el.addEventListener('keydown', function(e){
       if(e.key === 'Enter' && !e.shiftKey){
         e.preventDefault();
-        const clone = el.cloneNode(false);
-        clone.textContent = 'Description';
-        clone.dataset.bwLineEditable='';
-        el.after(clone);
-        makeEditableLine(clone);
+        let clone;
+        if(el.matches('li')){
+          clone = document.createElement('li');
+          clone.innerHTML = 'Description';
+          el.after(clone);
+          makeEditable(clone, section);
+        } else if(el.matches('.brandPill')){
+          clone = document.createElement('span');
+          clone.className = 'brandPill';
+          clone.textContent = 'Description';
+          el.after(clone);
+          makeEditable(clone, section);
+        } else {
+          clone = document.createElement(el.tagName.toLowerCase());
+          clone.className = el.className.replace('bw-inline-product-line','').trim();
+          clone.textContent = 'Description';
+          el.after(clone);
+          makeEditable(clone, section);
+        }
         clone.focus();
+        scheduleSave(section);
       }
     });
+    addDeleteButton(el, section);
   }
-  function applyProductInlineEditing(){
+
+  function addSectionButton(section){
+    if(!canEdit() || section.dataset.bwAddButton === '1') return;
+    section.dataset.bwAddButton = '1';
+    const btn = document.createElement('button');
+    btn.className = 'bw-inline-add';
+    btn.type = 'button';
+    btn.textContent = '+ Add line';
+    btn.addEventListener('click', async () => {
+      let container = section.querySelector('ul') || section.querySelector('.brandGrid') || section.querySelector('.product-info-card') || section;
+      let el;
+      if(container.matches('.brandGrid')){
+        el = document.createElement('span');
+        el.className = 'brandPill';
+        el.textContent = 'Description';
+      } else if(container.tagName && container.tagName.toLowerCase() === 'ul'){
+        el = document.createElement('li');
+        el.textContent = 'Description';
+      } else {
+        el = document.createElement('p');
+        el.className = 'subtitle';
+        el.textContent = 'Description';
+      }
+      container.appendChild(el);
+      makeEditable(el, section);
+      el.focus();
+      await saveSection(section);
+    });
+    section.appendChild(btn);
+  }
+
+  function applyToSection(section){
+    if(!canEdit() || !isEditableSection(section)) return;
+
+    section.querySelectorAll('.bw-inline-product-line').forEach(cleanEditable);
+
+    section.querySelectorAll('li, p.subtitle, p.source-note, .brandPill, .product-info-card p, .product-info-card li').forEach(el => {
+      if(el.closest('.section-reference-image') || el.closest('#bw-global-header')) return;
+      const text = (el.textContent || '').trim();
+      if(!text) return;
+      makeEditable(el, section);
+    });
+
+    addSectionButton(section);
+  }
+
+  async function loadSection(section){
+    if(!section || !isEditableSection(section) || loadedSections.has(section.id)) return;
+    loadedSections.add(section.id);
+    const key = storageKey(section.id);
+    try{
+      let data = null;
+      if(window.BWContentStore){
+        data = await BWContentStore.get(key, null);
+      } else {
+        const cached = localStorage.getItem('bwRemoteCache::' + key);
+        if(cached) data = JSON.parse(cached);
+      }
+      if(data && data.html){
+        section.innerHTML = data.html;
+      }
+    }catch(e){
+      console.warn('Product section load failed:', e);
+    }
+  }
+
+  async function refreshInlineEditing(){
     if(!canEdit()) return;
-    const sec = activeSectionName();
-    if(sec && !EDITABLE_SECTIONS.some(x=>sec.includes(x))) return;
-    const pane = document.querySelector('.browserContent,.productContent,.contentPanel,.salesContent,main') || document.body;
-    pane.querySelectorAll('li,p,.contentLead,.contentList li,.detailText div,.infoTile,.card .subtitle,.card p,.panel p,.panel li').forEach(el=>{
-      const text=(el.textContent||'').trim();
-      if(!text || el.closest('nav,header,.browserNav,.salesNav,#bw-global-header,.modalBack')) return;
-      makeEditableLine(el);
+    const section = activeSection();
+    if(!isEditableSection(section)) return;
+    await loadSection(section);
+    applyToSection(section);
+  }
+
+  function observeTabs(){
+    document.querySelectorAll('.product-tab').forEach(btn => {
+      btn.addEventListener('click', () => setTimeout(refreshInlineEditing, 120));
     });
   }
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(applyProductInlineEditing,250));
-  document.addEventListener('click',()=>setTimeout(applyProductInlineEditing,250));
-  document.addEventListener('bw:user-ready',()=>setTimeout(applyProductInlineEditing,250));
+
+  document.addEventListener('DOMContentLoaded', () => {
+    observeTabs();
+    setTimeout(refreshInlineEditing, 250);
+  });
+  document.addEventListener('bw:user-ready', () => setTimeout(refreshInlineEditing, 150));
+  document.addEventListener('click', () => setTimeout(refreshInlineEditing, 150));
 })();
 </script>
+
 
 </body>
 </html>

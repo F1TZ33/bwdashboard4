@@ -1,11 +1,4 @@
-Final editor patch.
-
-Replace included files only.
-
-Includes:
-- SOPs and FAQs rebuilt to checklist-style left navigation + right viewing pane.
-- Placeholder SOP/FAQ structure restored.
-- Old editor button panels removed/hidden.
-- Sales retains existing salesData, removes scripting overlay, places Scripting / Prompts at bottom of Re-Engagement, and supports inline line editing.
-- Product pages: all lines in Identification, Application, Brands, and Suppliers reading panes are made editable in Azure editor mode.
-- staticwebapp.config.json restricted to editor/admin.
+Fix patch:
+- Sales: rerenders editable fields after Azure user role is loaded and saves inline edits.
+- Product pages: replaces weak detection with robust active-section editing for Identification, Application, Brands, Suppliers.
+- Product edits save per product + section to Azure storage and remain after reload.

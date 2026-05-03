@@ -230,8 +230,12 @@ let salesData = [{"key": "basics", "icon": "⚡", "label": "Basics", "subtitle":
 const SALES_KEY='sales-tips';
 const DEFAULT_SALES_DATA=JSON.parse(JSON.stringify(salesData));
 async function saveSalesData(){
-  try{ await BWContentStore.save(SALES_KEY, salesData); }
-  catch(e){ alert('Save failed: '+e.message+'\nChanges have been cached locally only.'); }
+  try{
+    localStorage.setItem('bwRemoteCache::'+SALES_KEY, JSON.stringify(salesData));
+    if(window.BWContentStore) await BWContentStore.save(SALES_KEY, salesData);
+  } catch(e){
+    console.warn('Sales save failed:', e);
+  }
 }
 function activeSalesRefs(){
   const [key, idxRaw] = String(activeItemKey).split('-');
@@ -372,6 +376,14 @@ function initSalesTips(){
   BWContentStore.waitForUser().catch(()=>{});
 }
 initSalesTips();
+
+document.addEventListener('bw:user-ready', () => {
+  renderNav();
+  const activeType = salesData.find(t => t.key === openTypeKey) || salesData[0];
+  const idx = Math.max(0, parseInt(String(activeItemKey).split('-').pop() || '0', 10));
+  renderContent(activeType, (activeType.items || [])[idx] || (activeType.items || [])[0]);
+});
+
 </script>
 
 <script src="assets/js/bw-header.js"></script>
