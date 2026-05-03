@@ -1,4 +1,4 @@
-const { TableClient, AzureNamedKeyCredential } = require('@azure/data-tables');
+const { TableClient } = require('@azure/data-tables');
 
 const TABLE_NAME = process.env.BW_CONTENT_TABLE || 'BwDashboardContent';
 const CONNECTION_STRING = process.env.BW_CONTENT_STORAGE_CONNECTION_STRING || process.env.AzureWebJobsStorage || '';
@@ -35,7 +35,7 @@ function cleanKey(input) {
 
 function tableClient() {
   if (!CONNECTION_STRING) return null;
-  return TableClient.fromConnectionString(CONNECTION_STRING, TABLE_NAME, { allowInsecureConnection: false });
+  return TableClient.fromConnectionString(CONNECTION_STRING, TABLE_NAME);
 }
 
 module.exports = async function (context, req) {

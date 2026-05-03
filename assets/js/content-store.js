@@ -33,7 +33,7 @@
     });
     if(!res.ok){
       let detail='';
-      try{ detail=(await res.json()).error || ''; }catch(e){}
+      try{ const body = await res.json(); detail = body.detail || body.error || JSON.stringify(body); }catch(e){}
       throw new Error(detail || ('Save failed: ' + res.status));
     }
     return await res.json();
@@ -44,7 +44,7 @@
     const res = await fetch(API + '?key=' + encodeURIComponent(key), { method:'DELETE' });
     if(!res.ok){
       let detail='';
-      try{ detail=(await res.json()).error || ''; }catch(e){}
+      try{ const body = await res.json(); detail = body.detail || body.error || JSON.stringify(body); }catch(e){}
       throw new Error(detail || ('Delete failed: ' + res.status));
     }
     return await res.json();
